@@ -33,6 +33,15 @@ impl<A: Lexer, B: Lexer, C: Lexer> Lexer for (A, B, C) {
     }
 }
 
+impl<A: Lexer, B: Lexer, C: Lexer, D: Lexer> Lexer for (A, B, C, D) {
+    fn lex<'src>(&self, source: &'src str) -> Option<&'src str> {
+        let source = self.0.lex(source)?;
+        let source = self.1.lex(source)?;
+        let source = self.2.lex(source)?;
+        self.3.lex(source)
+    }
+}
+
 pub struct Or<A, B>(pub A, pub B);
 
 impl<A: Lexer, B: Lexer> Lexer for Or<A, B> {
